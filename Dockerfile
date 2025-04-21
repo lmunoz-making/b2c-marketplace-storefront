@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json yarn.lock ./
 
 # Instala dependencias - quitamos el registro personalizado a menos que sea realmente necesario
-RUN yarn config set registry http://host.docker.internal:4873
+RUN yarn config set registry http://172.17.0.1:4873
 RUN yarn install --frozen-lockfile
 
 # Copia el resto del código fuente
@@ -35,7 +35,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./
 
 # Instala solo las dependencias de producción
-RUN yarn config set registry http://host.docker.internal:4873
+RUN yarn config set registry http://172.17.0.1:4873
 RUN yarn install --frozen-lockfile --production
 
 # Cambia al usuario no privilegiado
